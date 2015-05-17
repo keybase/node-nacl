@@ -1,0 +1,30 @@
+{
+  "name": "keybase-nacl",
+  "version": "1.0.0",
+  "description": "A small wrapper library to switch between C and JS NaCl depending on the install",
+  "main": "lib/main.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/keybase/node-nacl"
+  },
+  "keywords": [
+    "NaCl",
+    "libsodium"
+  ],
+  "author": "Maxwell Krohn",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/keybase/node-nacl/issues"
+  },
+  "homepage": "https://github.com/keybase/node-nacl",
+  "devDependencies": {
+    "iced-coffee-script": "^1.8.0-d"
+  },
+  "dependencies": {
+    "iced-runtime": "^1.0.2",
+    "tweetnacl": "^0.13.1"
+  }
+}
