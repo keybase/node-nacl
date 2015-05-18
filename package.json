@@ -24,7 +24,8 @@
     "browserify": "^10.2.0",
     "iced-coffee-script": "^1.8.0-d",
     "iced-test": "0.0.21",
-    "icsify": "^0.7.0"
+    "icsify": "^0.7.0",
+    "istanbul": "^0.3.14"
   },
   "dependencies": {
     "iced-runtime": "^1.0.2",
