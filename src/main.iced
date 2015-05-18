@@ -15,6 +15,7 @@ exports.sign =
   publicKeyLength : nacl_js.sign.publicKeyLength
   secretKeyLength : nacl_js.sign.secretKeyLength
   signatureLength : nacl_js.sign.signatureLength
+  seedLength : nacl_js.sign.seedLength
 
 #================================================================
 
@@ -32,7 +33,7 @@ exports.sign =
 #
 exports.alloc = ({publicKey, secretKey, force_js}) ->
   ret = if force_js or not nacl_c? then new TweetNaCl { publicKey, secretKey }
-  else Sodium { publicKey, secretKey }
+  else new Sodium { publicKey, secretKey }
 
   # pass the libraries through with the code
   ret.lib = {c : nacl_c, js : nacl_js }

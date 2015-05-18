@@ -1,4 +1,8 @@
 
+#================================================================
+
+exports.b2u = b2u = (b) -> new Uint8Array(b)
+exports.u2b = u2b = (u) -> new Buffer u
 
 #================================================================
 
@@ -40,5 +44,10 @@ exports.Base = class Base
     @publicKey = u2b tmp.publicKey
 
     return { @secretKey, @publicKey }
+
+  #---------------------------
+
+  get_secret_key : () -> @secretKey
+  get_public_key : () -> @publicKey
 
 #================================================================

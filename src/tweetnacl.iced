@@ -1,10 +1,5 @@
 {bufeq_secure} = require './util'
-{Base} = require './base'
-
-#================================================================
-
-exports.b2u = b2u = (b) -> new Uint8Array(b)
-exports.u2b = u2b = (u) -> new Buffer u
+{b2u,u2b,Base} = require './base'
 
 #================================================================
 
@@ -16,7 +11,7 @@ exports.u2b = u2b = (u) -> new Buffer u
 exports.TweetNaCl = class TweetNaCl extends Base
 
   #
-  # verify
+  # @method verify
   #
   # Verify a signature, given a public key, the signature, and the payload
   # (if it's not alread attached).
@@ -45,4 +40,18 @@ exports.TweetNaCl = class TweetNaCl extends Base
       payload = r_payload
     return [ err, payload ]
   
+  #
+  # @method sign
+  #
+  # Generate a signature for the given payload, either attached or 
+  # unattached
+  #
+  # @param {Bool} detached If this is a detached signature or not.
+  # @param {Buffer} payload The payload to sign
+  # @return {Butter} The signature
+  #
+  sign : ({payload, detached}) ->
+    f = if detached then @lib.js.sign.detached else @lib.js.sign
+    u2b(f(b2u(payload), b2u(@secretKey)))
+
 #================================================================
