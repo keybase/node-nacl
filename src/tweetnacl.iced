@@ -30,7 +30,7 @@ exports.TweetNaCl = class TweetNaCl extends Base
       payload = new Buffer [] if not payload?
       if not @lib.js.sign.detached.verify b2u(payload), b2u(sig), b2u(@publicKey)
         err = new Error "signature didn't verify"
-    else if not (r_payload = nacl_js.sign.open b2u(sig), b2u(@publicKey))?
+    else if not (r_payload = @lib.js.sign.open b2u(sig), b2u(@publicKey))?
       err = new Error "signature didn't verify"
     else if not (r_payload = u2b r_payload)?
       err = new Error "failed to convert from a Uint8Array to a buffer"
@@ -38,6 +38,7 @@ exports.TweetNaCl = class TweetNaCl extends Base
       err = new Error "got unexpected payload"
     else
       payload = r_payload
+    if err? then payload = null
     return [ err, payload ]
   
   #

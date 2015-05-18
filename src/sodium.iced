@@ -44,7 +44,7 @@ exports.Sodium = class Sodium extends Base
     else if not payload? then payload = r_payload
     else if not bufeq_secure r_payload, payload
       err = new Error "got unexpected payload"
-      payload = null
+    if err? then payload = null
     return [ err, payload ] 
 
   #
