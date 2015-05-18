@@ -4,10 +4,13 @@ nacl_c = null
 {Sodium} = require './sodium'
 {TweetNaCl} = require './tweetnacl'
 
-try
-  mod = "sodium"
-  nacl_c = require(mod).api
-catch e
+nacl_c
+mods = [ "sodium", "keybase-sodium" ]
+for mod in mods
+  try
+    nacl_c = require(mod).api
+    break
+  catch e
   # noop
 
 #================================================================
