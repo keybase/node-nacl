@@ -29,7 +29,7 @@ exports.TweetNaCl = class TweetNaCl extends Base
     if detached
       payload = new Buffer [] if not payload?
       if not @lib.js.sign.detached.verify b2u(payload), b2u(sig), b2u(@publicKey)
-        err = new Error "signature didn't verify"
+        err = new Error "Signature failed to verify"
     else if not (r_payload = @lib.js.sign.open b2u(sig), b2u(@publicKey))?
       err = new Error "signature didn't verify"
     else if not (r_payload = u2b r_payload)?
