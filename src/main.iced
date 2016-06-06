@@ -1,16 +1,12 @@
 
 nacl_js = require 'tweetnacl/nacl-fast'
-nacl_c = null 
+nacl_c = null
 {Sodium} = require './sodium'
 {TweetNaCl} = require './tweetnacl'
 
-nacl_c
-mods = [ "sodium", "keybase-sodium" ]
-for mod in mods
-  try
-    nacl_c = require(mod).api
-    break
-  catch e
+try
+  nacl_c = require("sodium").api
+catch e
   # noop
 
 #================================================================
@@ -30,7 +26,7 @@ exports.sign =
 # Use compiled sodium code if possible, but if not, or if asked
 # to use JS, fall back to TweetNaCl
 #
-# 
+#
 # @param {Buffer} publicKey The public key for this instance.
 # @param {Buffer} secretKey The secret key for this instance.
 # @return {Base} The key wrapper object, a subclass of type `Base`
