@@ -55,4 +55,15 @@ exports.TweetNaCl = class TweetNaCl extends Base
     f = if detached then @lib.js.sign.detached else @lib.js.sign
     u2b(f(b2u(payload), b2u(@secretKey)))
 
+  #
+  # @method encrypt
+  # Encrypt a given payload
+  # @param {Buffer} payload The payload to encrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key to encrypt for
+  # @return {Buffer} The encrypted payload
+  encrypt : ({payload, pubkey}) ->
+    if not payload? then return new Buffer('')
+    
+
 #================================================================
