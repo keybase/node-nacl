@@ -49,7 +49,7 @@ exports.TweetNaCl = class TweetNaCl extends Base
   #
   # @param {Bool} detached If this is a detached signature or not.
   # @param {Buffer} payload The payload to sign
-  # @return {Butter} The signature
+  # @return {Buffer} The signature
   #
   sign : ({payload, detached}) ->
     f = if detached then @lib.js.sign.detached else @lib.js.sign
