@@ -45,7 +45,7 @@ exports.Sodium = class Sodium extends Base
     else if not bufeq_secure r_payload, payload
       err = new Error "got unexpected payload"
     if err? then payload = null
-    return [ err, payload ] 
+    return [ err, payload ]
 
   #
   # @method sign
@@ -58,5 +58,27 @@ exports.Sodium = class Sodium extends Base
   sign : ({detached, payload}) ->
     sig = @lib.c.crypto_sign payload, @secretKey
     if detached then @_detach(sig).sig else sig
+
+  #
+  # @method encrypt
+  # Encrypt a given plaintext
+  # @param {Buffer} plaintext The plaintext to encrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key to encrypt for
+  # @return {Buffer} The encrypted plaintext
+  encrypt : ({plaintext, nonce, pubkey}) ->
+    ciphertext = new Uint8Array()
+    return u2b(@lib.c.crypto_box(ciphertext, plaintext, nonce, pubkey, @secretKey))
+
+  #
+  # @method decrypt
+  # 
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key that was used for encryption
+  # @return {Buffer} The decrypted plaintext
+  decrypt : ({ciphertext, nonce, pubkey}) ->
+    plaintext = new Uint8Array()
+    return u2b(@lib.c.box.open(plaintext, b2u(ciphertext), nonce, pubkey, @secretKey))
 
 #================================================================

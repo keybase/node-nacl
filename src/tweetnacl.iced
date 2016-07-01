@@ -57,13 +57,22 @@ exports.TweetNaCl = class TweetNaCl extends Base
 
   #
   # @method encrypt
-  # Encrypt a given payload
-  # @param {Buffer} payload The payload to encrypt
+  # Encrypt a given plaintext
+  # @param {Buffer} plaintext The plaintext to encrypt
   # @param {Buffer} nonce The nonce 
   # @param {Buffer} pubkey The public key to encrypt for
-  # @return {Buffer} The encrypted payload
-  encrypt : ({payload, nonce, pubkey}) ->
-    if not payload? then return new Buffer('')
-    else return @lib.js.box(payload, nonce, pubkey, @secretKey)
+  # @return {Buffer} The encrypted plaintext
+  encrypt : ({plaintext, nonce, pubkey}) ->
+    return u2b(@lib.js.box(plaintext, nonce, pubkey, @secretKey))
+
+  #
+  # @method decrypt
+  # 
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key that was used for encryption
+  # @return {Buffer} The decrypted plaintext
+  decrypt : ({ciphertext, nonce, pubkey}) ->
+    return u2b(@lib.js.box.open(b2u(ciphertext), nonce, pubkey, @secretKey))
 
 #================================================================
