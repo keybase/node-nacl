@@ -26,7 +26,7 @@
     "iced-test": "0.0.21",
     "icsify": "^0.7.0",
     "istanbul": "^0.3.14",
-    "sodium": "^0.3.0"
+    "sodium": "^1.1.12"
   },
   "dependencies": {
     "iced-runtime": "^1.0.2",
