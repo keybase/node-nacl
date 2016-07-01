@@ -29,12 +29,15 @@
       };
     };
 
-    Base.prototype.get_secret_key = function() {
-      return this.secretKey;
-    };
-
-    Base.prototype.get_public_key = function() {
-      return this.publicKey;
+    Base.prototype.genBoxPair = function() {
+      var tmp;
+      tmp = this.lib.js.box.keyPair();
+      this.secretKey = u2b(tmp.secretKey);
+      this.publicKey = u2b(tmp.publicKey);
+      return {
+        secretKey: this.secretKey,
+        publicKey: this.publicKey
+      };
     };
 
     return Base;
