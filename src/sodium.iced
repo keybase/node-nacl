@@ -1,5 +1,7 @@
 {bufeq_secure} = require './util'
 {Base} = require './base'
+b2u = b2u = (b) -> new Uint8Array(b)
+u2b = u2b = (u) -> new Buffer u
 
 #================================================================
 
@@ -57,13 +59,13 @@ exports.Sodium = class Sodium extends Base
   #
   sign : ({detached, payload}) ->
     sig = @lib.c.crypto_sign payload, @secretKey
-    if detached then @_detach(sig).sig else sig
+    if detached then u2b(@_detach(sig).sig) else u2b(sig)
 
   #
   # @method encrypt
   # Encrypt a given plaintext
   # @param {Buffer} plaintext The plaintext to encrypt
-  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} nonce The nonce
   # @param {Buffer} pubkey The public key to encrypt for
   # @return {Buffer} The encrypted plaintext
   encrypt : ({plaintext, nonce, pubkey}) ->
