@@ -1,7 +1,7 @@
+{prng} = require('crypto')
 main = require('../../')
 util = require('../../src/util.iced')
 nonce = require('../../src/nonce.iced')
-{prng} = require('crypto')
 
 msg = new Buffer('If you please--draw me a sheep!')
 
@@ -17,16 +17,25 @@ test_encrypt_encrypt = (T, tweetnacl, sodium, nonce, recipient, cb) ->
   T.assert(util.bufeq_secure(twncl_ctext, sodium_ctext)?, "ciphertexts differ: tweetnacl=#{twncl_ctext}, sodium=#{sodium_ctext}")
   cb()
 
-exports.test_tweetnacl_tweetnacl_consistency = (T, cb) ->
+exports.test_tweetnacl_consistency = (T, cb) ->
   tweetnacl = main.alloc({force_js : true})
   tweetnacl.genBoxPair()
   await test_encrypt_decrypt(T, tweetnacl, tweetnacl, nonce.nonceForChunkSecretBox(1), defer())
   cb()
 
-exports.test_libsodium_libsodium_consistency = (T, cb) ->
+exports.test_libsodium_consistency = (T, cb) ->
   sodium = main.alloc({force_js : false})
   sodium.genBoxPair()
   await test_encrypt_decrypt(T, sodium, sodium, nonce.nonceForChunkSecretBox(1), defer())
+  cb()
+
+exports.test_cross_consistency = (T, cb) ->
+  sodium = main.alloc({force_js : false})
+  sodium.genBoxPair()
+  tweetnacl = main.alloc({force_js : true})
+  tweetnacl.genBoxPair()
+  await test_encrypt_decrypt(T, sodium, tweetnacl, nonce.nonceForChunkSecretBox(1), defer())
+  await test_encrypt_decrypt(T, tweetnacl, sodium, nonce.nonceForChunkSecretBox(1), defer())
   cb()
 
 exports.test_ciphertext_output = (T, cb) ->
