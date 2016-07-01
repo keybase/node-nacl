@@ -157,7 +157,7 @@
     Sodium.prototype.sign = function(_arg) {
       var detached, payload, sig;
       detached = _arg.detached, payload = _arg.payload;
-      sig = this.lib.c.crypto_sign(payload, this.secretKey);
+      sig = this.lib.c.crypto_sign(b2u(payload), this.secretKey);
       if (detached) {
         return u2b(this._detach(sig).sig);
       } else {

@@ -38,7 +38,7 @@ exports.Sodium = class Sodium extends Base
       return [ err, null ]
     msg = if detached then Buffer.concat([sig, payload]) else sig
 
-    r_payload = @lib.c.crypto_sign_open [msg], @publicKey
+    r_payload = @lib.c.crypto_sign_open msg, @publicKey
 
     if not r_payload?
       err = new Error "Signature failed to verify"
@@ -58,7 +58,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Boolean} detached Whether this is a detached message or not
   #
   sign : ({detached, payload}) ->
-    sig = @lib.c.crypto_sign payload, @secretKey
+    sig = @lib.c.crypto_sign b2u(payload), @secretKey
     if detached then u2b(@_detach(sig).sig) else u2b(sig)
 
   #
