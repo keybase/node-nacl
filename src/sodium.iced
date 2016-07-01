@@ -1,7 +1,5 @@
 {bufeq_secure} = require './util'
 {Base} = require './base'
-b2u = b2u = (b) -> new Uint8Array(b)
-u2b = u2b = (u) -> new Buffer u
 
 #================================================================
 
@@ -58,9 +56,8 @@ exports.Sodium = class Sodium extends Base
   # @param {Boolean} detached Whether this is a detached message or not
   #
   sign : ({detached, payload}) ->
-    sig = @lib.c.crypto_sign b2u(payload), @secretKey
-    if detached then u2b(@_detach(sig).sig) else u2b(sig)
-
+    sig = @lib.c.crypto_sign payload, @secretKey
+    if detached then @_detach(sig).sig else sig
   #
   # @method encrypt
   # Encrypt a given plaintext
@@ -70,7 +67,7 @@ exports.Sodium = class Sodium extends Base
   # @return {Buffer} The encrypted plaintext
   encrypt : ({plaintext, nonce, pubkey}) ->
     ciphertext = new Uint8Array()
-    return u2b(@lib.c.crypto_box(ciphertext, plaintext, nonce, pubkey, @secretKey))
+    return Base.u2b(@lib.c.crypto_box(ciphertext, plaintext, nonce, pubkey, @secretKey))
 
   #
   # @method decrypt
@@ -81,6 +78,6 @@ exports.Sodium = class Sodium extends Base
   # @return {Buffer} The decrypted plaintext
   decrypt : ({ciphertext, nonce, pubkey}) ->
     plaintext = new Uint8Array()
-    return u2b(@lib.c.crypto_box_open(plaintext, b2u(ciphertext), nonce, pubkey, @secretKey))
+    return Base.u2b(@lib.c.crypto_box_open(plaintext, Base.b2u(ciphertext), nonce, pubkey, @secretKey))
 
 #================================================================
