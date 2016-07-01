@@ -1,5 +1,6 @@
 nonceBytes = 24
-{rng} = require('crypto')
+sigNonceBytes = 16
+{prng} = require('crypto')
 
 nonceForSenderKeySecretBox = () -> return new Buffer('saltpack_sender_key_sbox')
 
@@ -12,3 +13,5 @@ nonceForMACKeyBox = (headerHash) ->
 nonceForChunkSecretBox = (encryptionBlockNumber) ->
   nonce = new Buffer('saltpack_ploadsb')
   return Buffer.concat([nonce, uint64be.encode(encryptionBlockNumber)])
+
+sigNonce = () -> return prng(sigNonceBytes)
