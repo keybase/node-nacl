@@ -62,8 +62,8 @@ exports.TweetNaCl = class TweetNaCl extends Base
   # @param {Buffer} nonce The nonce 
   # @param {Buffer} pubkey The public key to encrypt for
   # @return {Buffer} The encrypted payload
-  encrypt : ({payload, pubkey}) ->
+  encrypt : ({payload, nonce, pubkey}) ->
     if not payload? then return new Buffer('')
-    
+    else return @lib.js.box(payload, nonce, pubkey, @secretKey)
 
 #================================================================
