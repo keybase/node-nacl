@@ -79,6 +79,6 @@ exports.Sodium = class Sodium extends Base
   # @return {Buffer} The decrypted plaintext
   decrypt : ({ciphertext, nonce, pubkey}) ->
     plaintext = new Uint8Array()
-    return u2b(@lib.c.box.open(plaintext, b2u(ciphertext), nonce, pubkey, @secretKey))
+    return u2b(@lib.c.crypto_box_open(plaintext, b2u(ciphertext), nonce, pubkey, @secretKey))
 
 #================================================================
