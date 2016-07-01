@@ -30,7 +30,7 @@
   "dependencies": {
     "iced-runtime": "^1.0.2",
     "tweetnacl": "^0.13.1",
-    "libsodium": "^0.3.0",
+    "libsodium-wrappers": "^0.3.0",
     "uint64be": "^1.0.1"
   }
 }

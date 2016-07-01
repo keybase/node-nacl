@@ -3,7 +3,7 @@ main = require('../../')
 util = require('../../src/util.iced')
 nonce = require('../../src/nonce.iced')
 
-msg = new Buffer('If you please--draw me a sheep!')
+msg = prng((1024**2)*20)
 
 test_encrypt_decrypt = (T, encryptor, decryptor, nonce, cb) ->
   ciphertext = encryptor.encrypt({plaintext : msg, nonce : nonce, pubkey : decryptor.publicKey})

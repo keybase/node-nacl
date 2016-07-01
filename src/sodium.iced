@@ -34,9 +34,9 @@ exports.Sodium = class Sodium extends Base
     if detached and not payload?
       err = new Error "in detached mode, you must supply a payload"
       return [ err, null ]
-    msg = if detached then Buffer.concat [ sig, payload ] else sig
+    msg = if detached then Buffer.concat([sig, payload]) else sig
 
-    r_payload = @lib.c.crypto_sign_open msg, @publicKey
+    r_payload = @lib.c.crypto_sign_open [msg], @publicKey
 
     if not r_payload?
       err = new Error "Signature failed to verify"

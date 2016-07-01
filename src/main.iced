@@ -1,6 +1,6 @@
 
 nacl_js = require 'tweetnacl/nacl-fast'
-nacl_c = null
+nacl_c = require 'libsodium-wrappers'
 {Sodium} = require './sodium'
 {TweetNaCl} = require './tweetnacl'
 
