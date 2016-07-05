@@ -11,26 +11,26 @@ msg = new Buffer """The vision of a rock where lightnings whirl'd
 
 test = (T,detached,signer,verifier,cb) ->
   sig = signer.sign { payload: msg, detached }
-  [err, payload] = verifier.verify { payload : msg, sig, detached }
+  [err, payload] = verifier.verify { payload : msg, detached, sig }
   T.no_error err
   tweak msg
-  [err, payload] = verifier.verify { payload : msg, sig, detached }
+  [err, payload] = verifier.verify { payload : msg, detached, sig }
   T.assert err?, "bad payload"
   T.assert not payload?, "no payload came back"
   tweak msg
   tweak signer.publicKey
-  [err, payload] = verifier.verify { payload : msg, sig, detached }
+  [err, payload] = verifier.verify { payload : msg, detached, sig }
   T.assert err?, "bad key"
   T.assert not payload?, "no payload came back"
   tweak signer.publicKey
   tweak sig
-  [err, payload] = verifier.verify { payload : msg, sig, detached }
+  [err, payload] = verifier.verify { payload : msg, detached, sig }
   T.assert err?, "bad sig"
   T.assert not payload?, "no payload came back"
   if not detached?
     tweak sig
     tweak sig, main.sign.signatureLength + 3
-    [err, payload] = verifier.verify { payload : msg, sig, detached }
+    [err, payload] = verifier.verify { payload : msg, detached, sig }
     T.assert err?, "bad sig"
     T.assert not payload?, "no payload came back"
   cb()
