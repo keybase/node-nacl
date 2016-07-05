@@ -1,5 +1,5 @@
 {bufeq_secure} = require './util'
-{Base} = require './base'
+{b2u,u2b,Base} = require './base'
 
 #================================================================
 
@@ -66,8 +66,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} pubkey The public key to encrypt for
   # @return {Buffer} The encrypted plaintext
   encrypt : ({plaintext, nonce, pubkey}) ->
-    ciphertext = new Uint8Array()
-    return Base.u2b(@lib.c.crypto_box(ciphertext, plaintext, nonce, pubkey, @secretKey))
+    return u2b(@lib.c.crypto_box(plaintext, nonce, pubkey, @secretKey))
 
   #
   # @method decrypt
@@ -77,7 +76,6 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} pubkey The public key that was used for encryption
   # @return {Buffer} The decrypted plaintext
   decrypt : ({ciphertext, nonce, pubkey}) ->
-    plaintext = new Uint8Array()
-    return Base.u2b(@lib.c.crypto_box_open(plaintext, Base.b2u(ciphertext), nonce, pubkey, @secretKey))
+    return u2b(@lib.c.crypto_box_open(b2u(ciphertext), nonce, pubkey, @secretKey))
 
 #================================================================
