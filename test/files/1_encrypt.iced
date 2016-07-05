@@ -6,14 +6,14 @@ nonce = require('../../src/nonce.iced')
 msg = prng((1024**2)*20)
 
 test_encrypt_decrypt = (T, encryptor, decryptor, nonce, cb) ->
-  ciphertext = encryptor.encrypt({plaintext : msg, nonce : nonce, pubkey : decryptor.publicKey})
-  plaintext = decryptor.decrypt({ciphertext : ciphertext, nonce: nonce, pubkey : encryptor.publicKey})
+  ciphertext = encryptor.encrypt({plaintext : msg, nonce, pubkey : decryptor.publicKey})
+  plaintext = decryptor.decrypt({ciphertext : ciphertext, nonce, pubkey : encryptor.publicKey})
   T.assert(util.bufeq_secure(msg, plaintext)?, "inconsistency detected: msg=#{msg}, ciphertext=#{ciphertext}, plaintext=#{plaintext}")
   cb()
 
 test_encrypt_encrypt = (T, tweetnacl, sodium, nonce, recipient, cb) ->
-  twncl_ctext = tweetnacl.encrypt({plaintext : msg, nonce : nonce, pubkey : recipient.publicKey})
-  sodium_ctext = sodium.encrypt({plaintext : msg, nonce : nonce, pubkey : recipient.publicKey})
+  twncl_ctext = tweetnacl.encrypt({plaintext : msg, nonce, pubkey : recipient.publicKey})
+  sodium_ctext = sodium.encrypt({plaintext : msg, nonce, pubkey : recipient.publicKey})
   T.assert(util.bufeq_secure(twncl_ctext, sodium_ctext)?, "ciphertexts differ: tweetnacl=#{twncl_ctext}, sodium=#{sodium_ctext}")
   cb()
 
