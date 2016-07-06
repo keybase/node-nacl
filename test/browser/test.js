@@ -40,6 +40,14 @@
       };
     };
 
+    Base.prototype.get_secret_key = function() {
+      return this.secretKey;
+    };
+
+    Base.prototype.get_public_key = function() {
+      return this.publicKey;
+    };
+
     return Base;
 
   })();
@@ -27237,15 +27245,15 @@ test = function(T, detached, signer, verifier, cb) {
   });
   _ref = verifier.verify({
     payload: msg,
-    sig: sig,
-    detached: detached
+    detached: detached,
+    sig: sig
   }), err = _ref[0], payload = _ref[1];
   T.no_error(err);
   tweak(msg);
   _ref1 = verifier.verify({
     payload: msg,
-    sig: sig,
-    detached: detached
+    detached: detached,
+    sig: sig
   }), err = _ref1[0], payload = _ref1[1];
   T.assert(err != null, "bad payload");
   T.assert(payload == null, "no payload came back");
@@ -27253,8 +27261,8 @@ test = function(T, detached, signer, verifier, cb) {
   tweak(signer.publicKey);
   _ref2 = verifier.verify({
     payload: msg,
-    sig: sig,
-    detached: detached
+    detached: detached,
+    sig: sig
   }), err = _ref2[0], payload = _ref2[1];
   T.assert(err != null, "bad key");
   T.assert(payload == null, "no payload came back");
@@ -27262,8 +27270,8 @@ test = function(T, detached, signer, verifier, cb) {
   tweak(sig);
   _ref3 = verifier.verify({
     payload: msg,
-    sig: sig,
-    detached: detached
+    detached: detached,
+    sig: sig
   }), err = _ref3[0], payload = _ref3[1];
   T.assert(err != null, "bad sig");
   T.assert(payload == null, "no payload came back");
@@ -27272,8 +27280,8 @@ test = function(T, detached, signer, verifier, cb) {
     tweak(sig, main.sign.signatureLength + 3);
     _ref4 = verifier.verify({
       payload: msg,
-      sig: sig,
-      detached: detached
+      detached: detached,
+      sig: sig
     }), err = _ref4[0], payload = _ref4[1];
     T.assert(err != null, "bad sig");
     T.assert(payload == null, "no payload came back");
