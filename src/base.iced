@@ -53,4 +53,7 @@ exports.Base = class Base
     @publicKey = u2b(tmp.publicKey)
     return({@secretKey, @publicKey})
 
+  get_secret_key : () -> @secretKey
+  get_public_key : () -> @publicKey
+
 #================================================================
