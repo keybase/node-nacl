@@ -16,6 +16,12 @@ test_encrypt_encrypt = (T, tweetnacl, sodium, nonce, recipient, cb) ->
   T.assert(util.bufeq_secure(twncl_ctext, sodium_ctext)?, "ciphertexts differ: tweetnacl=#{twncl_ctext}, sodium=#{sodium_ctext}")
   cb()
 
+test_sbox_open = (T, encryptor, decryptor, nonce, cb) ->
+  ciphertext = encryptor.secretbox({plaintext : msg, nonce})
+  plaintext = decryptor.secretbox_open({ciphertext, nonce})
+  T.assert(util.bufeq_secure(msg, plaintext)?, "inconsistency detected: msg=#{msg}, ciphertext=#{ciphertext}, plaintext=#{plaintext}")
+  cb()
+
 exports.test_tweetnacl_consistency = (T, cb) ->
   tweetnacl = main.alloc({force_js : true})
   tweetnacl.genBoxPair()
@@ -46,4 +52,15 @@ exports.test_ciphertext_output = (T, cb) ->
   recipient = main.alloc({force_js : true})
   recipient.genBoxPair()
   await test_encrypt_encrypt(T, tweetnacl, sodium, prng(24), recipient, defer())
+  cb()
+
+exports.test_secretbox = (T, cb) ->
+  tweetnacl = main.alloc({force_js : true})
+  tweetnacl.genBoxPair()
+  sodium = main.alloc({force_js : false})
+  sodium.secretKey = tweetnacl.secretKey
+  await test_sbox_open(T, tweetnacl, tweetnacl, prng(24), defer())
+  await test_sbox_open(T, sodium, sodium, prng(24), defer())
+  await test_sbox_open(T, tweetnacl, sodium, prng(24), defer())
+  await test_sbox_open(T, sodium, tweetnacl, prng(24), defer())
   cb()

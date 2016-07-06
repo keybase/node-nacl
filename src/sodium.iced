@@ -58,6 +58,7 @@ exports.Sodium = class Sodium extends Base
   sign : ({detached, payload}) ->
     sig = @lib.c.crypto_sign payload, @secretKey
     if detached then @_detach(sig).sig else sig
+
   #
   # @method encrypt
   # Encrypt a given plaintext
@@ -69,13 +70,31 @@ exports.Sodium = class Sodium extends Base
     return @lib.c.crypto_box(plaintext, nonce, pubkey, @secretKey)[16...]
 
   #
+  # @method secretbox
+  # Secretbox a given plaintext
+  # @param {Buffer} plaintext The plaintext to encrypt
+  # @param {Buffer} nonce The nonce
+  # @return {Buffer} The encrypted plaintext
+  secretbox : ({plaintext, nonce}) ->
+    return @lib.c.crypto_secretbox(plaintext, nonce, @secretKey)[16...]
+
+  #
   # @method decrypt
   # 
   # @param {Buffer} ciphertext The ciphertext to decrypt
   # @param {Buffer} nonce The nonce 
   # @param {Buffer} pubkey The public key that was used for encryption
-  # @return {Buffer} The decrypted plaintext
+  # @return {Buffer} The decrypted ciphertext
   decrypt : ({ciphertext, nonce, pubkey}) ->
     return @lib.c.crypto_box_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, pubkey, @secretKey)
+
+  #
+  # @method secretbox_open
+  # Decrypt a given secretbox
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce
+  # @return {Buffer} The decrypted ciphertext
+  secretbox_open : ({ciphertext, nonce}) ->
+    return @lib.c.crypto_secretbox_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, @secretKey)
 
 #================================================================
