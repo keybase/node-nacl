@@ -34,7 +34,7 @@ exports.Sodium = class Sodium extends Base
     if detached and not payload?
       err = new Error "in detached mode, you must supply a payload"
       return [ err, null ]
-    msg = if detached then Buffer.concat [ sig, payload ] else sig
+    msg = if detached then Buffer.concat([sig, payload]) else sig
 
     r_payload = @lib.c.crypto_sign_open msg, @publicKey
 
@@ -45,7 +45,7 @@ exports.Sodium = class Sodium extends Base
     else if not bufeq_secure r_payload, payload
       err = new Error "got unexpected payload"
     if err? then payload = null
-    return [ err, payload ] 
+    return [ err, payload ]
 
   #
   # @method sign
@@ -58,5 +58,24 @@ exports.Sodium = class Sodium extends Base
   sign : ({detached, payload}) ->
     sig = @lib.c.crypto_sign payload, @secretKey
     if detached then @_detach(sig).sig else sig
+  #
+  # @method encrypt
+  # Encrypt a given plaintext
+  # @param {Buffer} plaintext The plaintext to encrypt
+  # @param {Buffer} nonce The nonce
+  # @param {Buffer} pubkey The public key to encrypt for
+  # @return {Buffer} The encrypted plaintext
+  encrypt : ({plaintext, nonce, pubkey}) ->
+    return @lib.c.crypto_box(plaintext, nonce, pubkey, @secretKey)[16...]
+
+  #
+  # @method decrypt
+  # 
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key that was used for encryption
+  # @return {Buffer} The decrypted plaintext
+  decrypt : ({ciphertext, nonce, pubkey}) ->
+    return @lib.c.crypto_box_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, pubkey, @secretKey)
 
 #================================================================

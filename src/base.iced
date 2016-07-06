@@ -47,6 +47,12 @@ exports.Base = class Base
 
   #---------------------------
 
+  genBoxPair : () ->
+    tmp = @lib.js.box.keyPair()
+    @secretKey = u2b(tmp.secretKey)
+    @publicKey = u2b(tmp.publicKey)
+    return({@secretKey, @publicKey})
+
   get_secret_key : () -> @secretKey
   get_public_key : () -> @publicKey
 

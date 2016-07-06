@@ -49,10 +49,30 @@ exports.TweetNaCl = class TweetNaCl extends Base
   #
   # @param {Bool} detached If this is a detached signature or not.
   # @param {Buffer} payload The payload to sign
-  # @return {Butter} The signature
+  # @return {Buffer} The signature
   #
   sign : ({payload, detached}) ->
     f = if detached then @lib.js.sign.detached else @lib.js.sign
     u2b(f(b2u(payload), b2u(@secretKey)))
+
+  #
+  # @method encrypt
+  # Encrypt a given plaintext
+  # @param {Buffer} plaintext The plaintext to encrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key to encrypt for
+  # @return {Buffer} The encrypted plaintext
+  encrypt : ({plaintext, nonce, pubkey}) ->
+    return u2b(@lib.js.box(plaintext, nonce, pubkey, @secretKey))
+
+  #
+  # @method decrypt
+  # 
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce 
+  # @param {Buffer} pubkey The public key that was used for encryption
+  # @return {Buffer} The decrypted plaintext
+  decrypt : ({ciphertext, nonce, pubkey}) ->
+    return u2b(@lib.js.box.open(b2u(ciphertext), nonce, pubkey, @secretKey))
 
 #================================================================
