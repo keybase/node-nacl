@@ -1,6 +1,6 @@
 {
   "name": "keybase-nacl",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A small wrapper library to switch between C and JS NaCl depending on the install",
   "main": "lib/main.js",
   "scripts": {

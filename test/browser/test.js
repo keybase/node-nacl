@@ -171,10 +171,22 @@
       return this.lib.c.crypto_box(plaintext, nonce, pubkey, this.secretKey).slice(16);
     };
 
+    Sodium.prototype.secretbox = function(_arg) {
+      var nonce, plaintext;
+      plaintext = _arg.plaintext, nonce = _arg.nonce;
+      return this.lib.c.crypto_secretbox(plaintext, nonce, this.secretKey).slice(16);
+    };
+
     Sodium.prototype.decrypt = function(_arg) {
       var ciphertext, nonce, pubkey;
       ciphertext = _arg.ciphertext, nonce = _arg.nonce, pubkey = _arg.pubkey;
       return this.lib.c.crypto_box_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, pubkey, this.secretKey);
+    };
+
+    Sodium.prototype.secretbox_open = function(_arg) {
+      var ciphertext, nonce;
+      ciphertext = _arg.ciphertext, nonce = _arg.nonce;
+      return this.lib.c.crypto_secretbox_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, this.secretKey);
     };
 
     return Sodium;
@@ -242,10 +254,22 @@
       return u2b(this.lib.js.box(plaintext, nonce, pubkey, this.secretKey));
     };
 
+    TweetNaCl.prototype.secretbox = function(_arg) {
+      var nonce, plaintext;
+      plaintext = _arg.plaintext, nonce = _arg.nonce;
+      return u2b(this.lib.js.secretbox(plaintext, nonce, this.secretKey));
+    };
+
     TweetNaCl.prototype.decrypt = function(_arg) {
       var ciphertext, nonce, pubkey;
       ciphertext = _arg.ciphertext, nonce = _arg.nonce, pubkey = _arg.pubkey;
       return u2b(this.lib.js.box.open(b2u(ciphertext), nonce, pubkey, this.secretKey));
+    };
+
+    TweetNaCl.prototype.secretbox_open = function(_arg) {
+      var ciphertext, nonce;
+      ciphertext = _arg.ciphertext, nonce = _arg.nonce;
+      return u2b(this.lib.js.secretbox.open(b2u(ciphertext), nonce, this.secretKey));
     };
 
     return TweetNaCl;
