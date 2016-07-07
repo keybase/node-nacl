@@ -93,4 +93,23 @@ exports.TweetNaCl = class TweetNaCl extends Base
   secretbox_open : ({ciphertext, nonce}) ->
     return u2b(@lib.js.secretbox.open(b2u(ciphertext), nonce, @secretKey))
 
+  #
+  # @method box_beforenm
+  # Precopmute a shared secret
+  # @param {Buffer} pubkey The public key to precompute with
+  # @param {Buffer} seckey The secret key to precompute with
+  # @return {Buffer} The precomputed shared secret key
+  box_beforenm : ({pubkey, seckey}) ->
+    return u2b(@lib.js.box.before(pubkey, seckey))
+
+  #
+  # @method box_open_afternm
+  # Precopmute a shared secret
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce
+  # @param {Buffer} secret The precomputed secret
+  # @return {Buffer} The decrypted ciphertext
+  box_open_afternm : ({ciphertext, nonce, secret}) ->
+    return u2b(@lib.js.box.open.after(b2u(ciphertext), nonce, secret))
+
 #================================================================
