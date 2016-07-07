@@ -130,6 +130,14 @@
       };
     };
 
+    Sodium.prototype._pad = function(x) {
+      return Buffer.concat([Buffer.alloc(16), x]);
+    };
+
+    Sodium.prototype._unpad = function(x) {
+      return x.slice(16);
+    };
+
     Sodium.prototype.verify = function(_arg) {
       var detached, err, msg, payload, r_payload, sig;
       payload = _arg.payload, sig = _arg.sig, detached = _arg.detached;
@@ -168,25 +176,25 @@
     Sodium.prototype.encrypt = function(_arg) {
       var nonce, plaintext, pubkey;
       plaintext = _arg.plaintext, nonce = _arg.nonce, pubkey = _arg.pubkey;
-      return this.lib.c.crypto_box(plaintext, nonce, pubkey, this.secretKey).slice(16);
+      return this._unpad(this.lib.c.crypto_box(plaintext, nonce, pubkey, this.secretKey));
     };
 
     Sodium.prototype.secretbox = function(_arg) {
       var nonce, plaintext;
       plaintext = _arg.plaintext, nonce = _arg.nonce;
-      return this.lib.c.crypto_secretbox(plaintext, nonce, this.secretKey).slice(16);
+      return this._unpad(this.lib.c.crypto_secretbox(plaintext, nonce, this.secretKey));
     };
 
     Sodium.prototype.decrypt = function(_arg) {
       var ciphertext, nonce, pubkey;
       ciphertext = _arg.ciphertext, nonce = _arg.nonce, pubkey = _arg.pubkey;
-      return this.lib.c.crypto_box_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, pubkey, this.secretKey);
+      return this.lib.c.crypto_box_open(this._pad(ciphertext), nonce, pubkey, this.secretKey);
     };
 
     Sodium.prototype.secretbox_open = function(_arg) {
       var ciphertext, nonce;
       ciphertext = _arg.ciphertext, nonce = _arg.nonce;
-      return this.lib.c.crypto_secretbox_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, this.secretKey);
+      return this.lib.c.crypto_secretbox_open(this._pad(ciphertext), nonce, this.secretKey);
     };
 
     Sodium.prototype.box_beforenm = function(_arg) {
@@ -198,7 +206,7 @@
     Sodium.prototype.box_open_afternm = function(_arg) {
       var ciphertext, nonce, secret;
       ciphertext = _arg.ciphertext, nonce = _arg.nonce, secret = _arg.secret;
-      return this.lib.c.crypto_box_open_afternm(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, secret);
+      return this.lib.c.crypto_box_open_afternm(this._pad(ciphertext), nonce, secret);
     };
 
     return Sodium;

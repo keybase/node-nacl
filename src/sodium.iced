@@ -16,6 +16,9 @@ exports.Sodium = class Sodium extends Base
     l = @lib.c.crypto_sign_BYTES
     { sig: sig[0...l], payload : sig[l...] }
 
+  _pad : (x) -> Buffer.concat([Buffer.alloc(16), x])
+  _unpad : (x) -> x[16...]
+
   #------
   
   #
@@ -67,7 +70,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} pubkey The public key to encrypt for
   # @return {Buffer} The encrypted plaintext
   encrypt : ({plaintext, nonce, pubkey}) ->
-    return @lib.c.crypto_box(plaintext, nonce, pubkey, @secretKey)[16...]
+    return @_unpad(@lib.c.crypto_box(plaintext, nonce, pubkey, @secretKey))
 
   #
   # @method secretbox
@@ -76,7 +79,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} nonce The nonce
   # @return {Buffer} The encrypted plaintext
   secretbox : ({plaintext, nonce}) ->
-    return @lib.c.crypto_secretbox(plaintext, nonce, @secretKey)[16...]
+    return @_unpad(@lib.c.crypto_secretbox(plaintext, nonce, @secretKey))
 
   #
   # @method decrypt
@@ -86,7 +89,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} pubkey The public key that was used for encryption
   # @return {Buffer} The decrypted ciphertext
   decrypt : ({ciphertext, nonce, pubkey}) ->
-    return @lib.c.crypto_box_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, pubkey, @secretKey)
+    return @lib.c.crypto_box_open(@_pad(ciphertext), nonce, pubkey, @secretKey)
 
   #
   # @method secretbox_open
@@ -95,7 +98,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} nonce The nonce
   # @return {Buffer} The decrypted ciphertext
   secretbox_open : ({ciphertext, nonce}) ->
-    return @lib.c.crypto_secretbox_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, @secretKey)
+    return @lib.c.crypto_secretbox_open(@_pad(ciphertext), nonce, @secretKey)
 
   #
   # @method box_beforenm
@@ -114,6 +117,6 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} secret The precomputed secret
   # @return {Buffer} The decrypted ciphertext
   box_open_afternm : ({ciphertext, nonce, secret}) ->
-    return @lib.c.crypto_box_open_afternm(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, secret)
+    return @lib.c.crypto_box_open_afternm(@_pad(ciphertext), nonce, secret)
 
 #================================================================
