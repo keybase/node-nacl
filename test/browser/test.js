@@ -189,6 +189,18 @@
       return this.lib.c.crypto_secretbox_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, this.secretKey);
     };
 
+    Sodium.prototype.box_beforenm = function(_arg) {
+      var pubkey, seckey;
+      pubkey = _arg.pubkey, seckey = _arg.seckey;
+      return this.lib.c.crypto_box_beforenm(pubkey, seckey);
+    };
+
+    Sodium.prototype.box_open_afternm = function(_arg) {
+      var ciphertext, nonce, secret;
+      ciphertext = _arg.ciphertext, nonce = _arg.nonce, secret = _arg.secret;
+      return this.lib.c.crypto_box_open_afternm(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, secret);
+    };
+
     return Sodium;
 
   })(Base);
@@ -270,6 +282,18 @@
       var ciphertext, nonce;
       ciphertext = _arg.ciphertext, nonce = _arg.nonce;
       return u2b(this.lib.js.secretbox.open(b2u(ciphertext), nonce, this.secretKey));
+    };
+
+    TweetNaCl.prototype.box_beforenm = function(_arg) {
+      var pubkey, seckey;
+      pubkey = _arg.pubkey, seckey = _arg.seckey;
+      return u2b(this.lib.js.box.before(pubkey, seckey));
+    };
+
+    TweetNaCl.prototype.box_open_afternm = function(_arg) {
+      var ciphertext, nonce, secret;
+      ciphertext = _arg.ciphertext, nonce = _arg.nonce, secret = _arg.secret;
+      return u2b(this.lib.js.box.open.after(b2u(ciphertext), nonce, secret));
     };
 
     return TweetNaCl;

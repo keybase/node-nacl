@@ -97,4 +97,23 @@ exports.Sodium = class Sodium extends Base
   secretbox_open : ({ciphertext, nonce}) ->
     return @lib.c.crypto_secretbox_open(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, @secretKey)
 
+  #
+  # @method box_beforenm
+  # Precopmute a shared secret
+  # @param {Buffer} pubkey The public key to precompute with
+  # @param {Buffer} seckey The secret key to precompute with
+  # @return {Buffer} The precomputed shared secret key
+  box_beforenm : ({pubkey, seckey}) ->
+    return @lib.c.crypto_box_beforenm(pubkey, seckey)
+
+  #
+  # @method box_open_afternm
+  # Precopmute a shared secret
+  # @param {Buffer} ciphertext The ciphertext to decrypt
+  # @param {Buffer} nonce The nonce
+  # @param {Buffer} secret The precomputed secret
+  # @return {Buffer} The decrypted ciphertext
+  box_open_afternm : ({ciphertext, nonce, secret}) ->
+    return @lib.c.crypto_box_open_afternm(Buffer.concat([Buffer.alloc(16), ciphertext]), nonce, secret)
+
 #================================================================

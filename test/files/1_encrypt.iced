@@ -2,7 +2,7 @@
 main = require('../../')
 util = require('../../src/util.iced')
 
-msg = prng((1024**2)*20)
+msg = prng((1024**2)*2)
 
 test_encrypt_decrypt = (T, encryptor, decryptor, nonce, cb) ->
   ciphertext = encryptor.encrypt({plaintext : msg, nonce, pubkey : decryptor.publicKey})
@@ -21,6 +21,15 @@ test_sbox_open = (T, encryptor, decryptor, nonce, cb) ->
   plaintext = decryptor.secretbox_open({ciphertext, nonce})
   T.assert(util.bufeq_secure(msg, plaintext)?, "inconsistency detected: msg=#{msg}, ciphertext=#{ciphertext}, plaintext=#{plaintext}")
   cb()
+
+test_precompute = (T, encryptor, decryptor, nonce, cb) ->
+  secret = encryptor.box_beforenm({pubkey : decryptor.publicKey, seckey : encryptor.secretKey})
+  ciphertext = encryptor.encrypt({plaintext : msg, nonce, pubkey : decryptor.publicKey})
+  plaintext = decryptor.box_open_afternm({ciphertext, nonce, secret})
+  T.assert(util.bufeq_secure(msg, plaintext)?, "inconsistency detected: msg=#{msg}, ciphertext=#{ciphertext}, plaintext=#{plaintext}")
+  cb()
+
+#===============================================================================
 
 exports.test_tweetnacl_consistency = (T, cb) ->
   tweetnacl = main.alloc({force_js : true})
@@ -63,4 +72,16 @@ exports.test_secretbox = (T, cb) ->
   await test_sbox_open(T, sodium, sodium, prng(24), defer())
   await test_sbox_open(T, tweetnacl, sodium, prng(24), defer())
   await test_sbox_open(T, sodium, tweetnacl, prng(24), defer())
+  cb()
+
+exports.test_before_after = (T, cb) ->
+  tweetnacl = main.alloc({force_js : true})
+  tweetnacl.genBoxPair()
+  sodium = main.alloc({force_js : false})
+  sodium.secretKey = tweetnacl.secretKey
+  sodium.publicKey = tweetnacl.publicKey
+  await test_precompute(T, tweetnacl, tweetnacl, prng(24), defer())
+  await test_precompute(T, sodium, sodium, prng(24), defer())
+  await test_precompute(T, tweetnacl, sodium, prng(24), defer())
+  await test_precompute(T, sodium, tweetnacl, prng(24), defer())
   cb()
