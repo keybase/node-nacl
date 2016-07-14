@@ -82,7 +82,9 @@ exports.TweetNaCl = class TweetNaCl extends Base
   # @param {Buffer} pubkey The public key that was used for encryption
   # @return {Buffer} The decrypted ciphertext
   decrypt : ({ciphertext, nonce, pubkey}) ->
-    return u2b(@lib.js.box.open(b2u(ciphertext), nonce, pubkey, @secretKey))
+    opened = @lib.js.box.open(b2u(ciphertext), nonce, pubkey, @secretKey)
+    if not opened then throw new Error('TweetNaCl box_open failed!')
+    else return u2b(opened)
 
   #
   # @method secretbox_open
@@ -91,7 +93,9 @@ exports.TweetNaCl = class TweetNaCl extends Base
   # @param {Buffer} nonce The nonce
   # @return {Buffer} The decrypted ciphertext
   secretbox_open : ({ciphertext, nonce}) ->
-    return u2b(@lib.js.secretbox.open(b2u(ciphertext), nonce, @secretKey))
+    opened = @lib.js.secretbox.open(b2u(ciphertext), nonce, @secretKey)
+    if not opened then throw new Error('TweetNaCl secretbox_open failed!')
+    else return u2b(opened)
 
   #
   # @method box_beforenm
@@ -110,6 +114,8 @@ exports.TweetNaCl = class TweetNaCl extends Base
   # @param {Buffer} secret The precomputed secret
   # @return {Buffer} The decrypted ciphertext
   box_open_afternm : ({ciphertext, nonce, secret}) ->
-    return u2b(@lib.js.box.open.after(b2u(ciphertext), nonce, secret))
+    opened = @lib.js.box.open.after(b2u(ciphertext), nonce, secret)
+    if not opened then throw new Error('TweetNaCl box_open_afternm failed!')
+    else return u2b(opened)
 
 #================================================================

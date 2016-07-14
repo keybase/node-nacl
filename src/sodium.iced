@@ -83,13 +83,14 @@ exports.Sodium = class Sodium extends Base
 
   #
   # @method decrypt
-  # 
   # @param {Buffer} ciphertext The ciphertext to decrypt
   # @param {Buffer} nonce The nonce 
   # @param {Buffer} pubkey The public key that was used for encryption
   # @return {Buffer} The decrypted ciphertext
   decrypt : ({ciphertext, nonce, pubkey}) ->
-    return @lib.c.crypto_box_open(@_pad(ciphertext), nonce, pubkey, @secretKey)
+    opened = @lib.c.crypto_box_open(@_pad(ciphertext), nonce, pubkey, @secretKey)
+    if not opened then throw new Error('Sodium decrypt failed!')
+    else return opened
 
   #
   # @method secretbox_open
@@ -98,7 +99,9 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} nonce The nonce
   # @return {Buffer} The decrypted ciphertext
   secretbox_open : ({ciphertext, nonce}) ->
-    return @lib.c.crypto_secretbox_open(@_pad(ciphertext), nonce, @secretKey)
+    opened = @lib.c.crypto_secretbox_open(@_pad(ciphertext), nonce, @secretKey)
+    if not opened then throw new Error('Sodium secretbox_open failed!')
+    else return opened
 
   #
   # @method box_beforenm
@@ -117,6 +120,8 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} secret The precomputed secret
   # @return {Buffer} The decrypted ciphertext
   box_open_afternm : ({ciphertext, nonce, secret}) ->
-    return @lib.c.crypto_box_open_afternm(@_pad(ciphertext), nonce, secret)
+    opened = @lib.c.crypto_box_open_afternm(@_pad(ciphertext), nonce, secret)
+    if not opened then throw new Error('Sodium box_open_afternm failed!')
+    else return opened
 
 #================================================================
