@@ -1,8 +1,11 @@
-{prng} = require('crypto')
-main = require('../../')
-util = require('../../src/util.iced')
+crypto = require('crypto')
+prng = crypto.prng
+main = require('../..')
+util = require('../../lib/util.js')
 
-msg = prng((1024**2)*2)
+msg = Buffer.from("")
+for i in [0..1024**2] by 65535
+  msg = Buffer.concat([msg, prng(65535)])
 
 test_encrypt_decrypt = (T, encryptor, decryptor, nonce, cb) ->
   ciphertext = encryptor.encrypt({plaintext : msg, nonce, pubkey : decryptor.publicKey})

@@ -1,6 +1,7 @@
 
 mods =
   sigs : require '../files/0_sigs.iced'
+  encrypt : require '../files/1_encrypt.iced'
 
 {BrowserRunner} = require('iced-test')
 
