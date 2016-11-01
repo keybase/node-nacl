@@ -124,4 +124,23 @@ exports.Sodium = class Sodium extends Base
     if not opened then throw new Error('Sodium box_open_afternm failed!')
     else return opened
 
+  #
+  # @method scalarmult_base
+  # Compute the scalar product of a standard group element G and
+  # integer n on curve 25519. Returns resulting group element Q.
+  # @param {Buffer} n Integer.
+  # @return {Buffer} Resulting group element.
+  scalarmult_base : (n) ->
+    return new Buffer @lib.c.crypto_scalarmult_base n
+
+  #
+  # @method scalarmult
+  # Multiply a group element P by an integer n on curve 25519. Return
+  # resulting group element Q.
+  # @param {Buffer} n Integer.
+  # @param {Buffer} P Group element.
+  # @return {Buffer} Resulting group element.
+  scalarmult : (n, P) ->
+    return new Buffer @lib.c.crypto_scalarmult n, P
+
 #================================================================
