@@ -4,7 +4,6 @@ all: build
 ICED=node_modules/.bin/iced
 BUILD_STAMP=build-stamp
 TEST_STAMP=test-stamp
-TEST_STAMP=test-stamp
 UGLIFYJS=node_modules/.bin/uglifyjs
 WD=`pwd`
 BROWSERIFY=node_modules/.bin/browserify
