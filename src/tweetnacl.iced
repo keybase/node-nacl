@@ -27,7 +27,7 @@ exports.TweetNaCl = class TweetNaCl extends Base
     # in front of the message.
     err = null
     if detached
-      payload = new Buffer [] if not payload?
+      payload = Buffer.alloc(0) if not payload?
       if not @lib.js.sign.detached.verify b2u(payload), b2u(sig), b2u(@publicKey)
         err = new Error "Signature failed to verify"
     else if not (r_payload = @lib.js.sign.open b2u(sig), b2u(@publicKey))?
@@ -125,7 +125,7 @@ exports.TweetNaCl = class TweetNaCl extends Base
   # @param {Buffer} n Integer.
   # @return {Buffer} Resulting group element.
   scalarmult_base : (n) ->
-    return new Buffer @lib.js.scalarMult.base n
+    return Buffer.from @lib.js.scalarMult.base n
 
   #
   # @method scalarmult
@@ -135,6 +135,6 @@ exports.TweetNaCl = class TweetNaCl extends Base
   # @param {Buffer} P Group element.
   # @return {Buffer} Resulting group element.
   scalarmult : (n, P) ->
-    return new Buffer @lib.js.scalarMult n, P
+    return Buffer.from @lib.js.scalarMult n, P
 
 #================================================================

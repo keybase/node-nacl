@@ -131,7 +131,7 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} n Integer.
   # @return {Buffer} Resulting group element.
   scalarmult_base : (n) ->
-    return new Buffer @lib.c.crypto_scalarmult_base n
+    return Buffer.from @lib.c.crypto_scalarmult_base n
 
   #
   # @method scalarmult
@@ -141,6 +141,6 @@ exports.Sodium = class Sodium extends Base
   # @param {Buffer} P Group element.
   # @return {Buffer} Resulting group element.
   scalarmult : (n, P) ->
-    return new Buffer @lib.c.crypto_scalarmult n, P
+    return Buffer.from @lib.c.crypto_scalarmult n, P
 
 #================================================================
