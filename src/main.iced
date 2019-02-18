@@ -4,9 +4,8 @@ nacl_c = null
 {Sodium} = require './sodium'
 {TweetNaCl} = require './tweetnacl'
 
-sodium_mod = "sod" + "ium"
 try
-  nacl_c = require(sodium_mod).api
+  nacl_c = require("sodium").api
 catch e
   # noop
 

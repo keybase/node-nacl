@@ -38,7 +38,7 @@ build: $(BUILD_STAMP)
 browser: $(BROWSER)
 
 $(BROWSER): lib/main.js $(BUILD_STAMP)
-	$(BROWSERIFY) -s nacl $< > $@
+	$(BROWSERIFY) -i sodium -s nacl $< > $@
 
 test-server: $(BUILD_STAMP)
 	$(ICED) test/run.iced
@@ -50,6 +50,6 @@ $(TEST_STAMP): test/browser/test.js
 	date > $@
 
 test/browser/test.js: test/browser/main.iced $(BUILD_STAMP)
-	$(BROWSERIFY) -t icsify $< > $@
+	$(BROWSERIFY) -i sodium -t icsify $< > $@
 
 .PHONY: clean setup test  test-browser coverage
