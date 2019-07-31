@@ -1,3 +1,7 @@
+# v1.1.1 (2019-07-31)
+
+- Dep upgrades
+
 # v1.1.0 (2019-02-18)
 
 - Use a regular `require("sodium")` rather than indirection. We used to do indirection so that browserify would not include sodium, but that same technique breaks webpack.
