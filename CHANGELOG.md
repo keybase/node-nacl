@@ -1,3 +1,7 @@
+# v1.1.2 (2019-11-04)
+
+- sodium is now optional
+
 # v1.1.1 (2019-07-31)
 
 - Dep upgrades
